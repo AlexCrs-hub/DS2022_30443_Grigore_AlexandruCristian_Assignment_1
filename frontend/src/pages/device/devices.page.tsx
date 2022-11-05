@@ -5,7 +5,6 @@ import DeviceModal from "../../components/deviceModal/device.modal";
 
 const DevicePage = (): JSX.Element => {
     const user = JSON.parse(localStorage.getItem('user') || "");
-    const [respone, setResponse] = useState<any[]>([]);
     const [userDevices, setUserDevices] = useState<Device[]>([]);
     const [show, setShow] = useState(false);
     const [modalData, setModalData] = useState<Device>({id: "", description: "", address: "", maxHrEnergyConsumption: 0, userId: ""});

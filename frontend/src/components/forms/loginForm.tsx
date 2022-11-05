@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "reactstrap";
 import getAxiosInstance from "../../axios.service";
 import "./formstyle.scss"
 
@@ -32,9 +33,10 @@ function LoginForm (props: formFields): JSX.Element {
 
     async function logIn() {
         const response = await getAxiosInstance().post('auth/login',{"name": data.name, "password": data.password});
-        console.log(response.data);
-        localStorage.setItem('user',JSON.stringify(response.data));
-        navigate('/devices');
+        if(response.data){
+            localStorage.setItem('user',JSON.stringify(response.data));
+            navigate('/devices');
+        }
     }
 
     async function register() {
