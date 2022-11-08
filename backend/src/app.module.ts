@@ -13,7 +13,7 @@ import { UserModule } from './modules/user.module';
 @Module({
   imports: [ TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'localhost',
+    host: 'host.docker.internal',
     port: 3306,
     username: 'root',
     password: 'RasenganSage12',
