@@ -7,6 +7,7 @@ import DeviceForm from "./components/forms/device/device.form";
 import LoginForm from "./components/forms/loginForm";
 import { User } from "./components/modal/modal";
 import NavigationBar from "./components/navigation/navbar";
+import { socket, WebsocketProvider } from "./context/WebsocketContext";
 import DevicePage from "./pages/device/devices.page";
 import Login from "./pages/login";
 import PageNotFound from "./pages/pagenotfound/pagenotfound";
@@ -33,6 +34,7 @@ const Main = (): JSX.Element => {
             <Route path="/create" element={<LoginForm login={false}/>}/>
             <Route path="/devices/create" element={user.isAdmin ? <DeviceForm/> : <PageNotFound/>}/>
         </Routes>
+        <WebsocketProvider value={socket}></WebsocketProvider>
     </div>
 }
 

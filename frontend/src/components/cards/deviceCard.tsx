@@ -1,6 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardBody, CardText } from "reactstrap";
+import getAxiosInstance from "../../axios.service";
 import ConsumptionChart from "../chart/chart";
+
+interface EnergyConsumption {
+    id: string;
+    timestamp: Date;
+    energyConsumption: number;
+    debiceId: string;
+}
+
+interface FilterEnergy{
+    day: number;
+    hour: number;
+    consumption: number;
+}
 
 export interface Device{
     id: string;
@@ -17,10 +31,17 @@ const DeviceCard: React.FC<Partial<Device>> = (props: Partial<Device>): JSX.Elem
 
     const [showChart, setShowChart] = useState(false);
     const date = useRef(new Date());
-    const consumption = [{day: 6, hour: 12, consumption: 10}, {day: 6, hour: 13, consumption: 15}, {day: 6, hour: 14, consumption: 5}, {day: 6, hour: 15, consumption: 22}];
+    const consumption: FilterEnergy[] = [];
     const filteredConsumption = useRef([{day: 0, hour: 0, consumption: 0}]);
+    const [energy, setEnergy] = useState<EnergyConsumption[]>([]);
 
     useEffect(() => {
+        getAxiosInstance().get(`energy/${props.id}`).then(res => setEnergy(res.data));
+        energy.forEach(elem => {
+            const date = new Date(elem.timestamp);
+            const energy:FilterEnergy ={day: date.getDay(), hour: date.getHours(), consumption: elem.energyConsumption};
+            consumption.push(energy); 
+        })
         filteredConsumption.current = consumption.filter(entry => entry.day === new Date(date.current).getDate());
     },[consumption, date]);
 
@@ -41,7 +62,6 @@ const DeviceCard: React.FC<Partial<Device>> = (props: Partial<Device>): JSX.Elem
                 : [<button type={"button"} onClick={() => setShowChart(true)}>Consumption</button>,  <input type="date" onChange={(event: any) => {date.current = event.target.value; console.log(date);}}></input>]
                 }
             </CardBody>
-           
         </Card>
         {showChart ? <ConsumptionChart data={filteredConsumption.current} onClose={() => setShowChart(false)}/> : null}
     </div>
